@@ -196,11 +196,18 @@ textarea {
   padding: 11px 24px;
   border-radius: 6px;
   border: 2px solid currentColor;
-  background: currentColor;
+  background: currentColor;  /* ← change ça en background-color si tu veux */
   cursor: pointer;
   transition: all .15s;
-  color: #fff;
 }
+
+/* NOUVELLES CLASSES POUR LES COULEURS */
+.btn-generate.cannibal { background-color: #b91c1c; }
+.btn-generate.opps     { background-color: #15803d; }
+.btn-generate.positions { background-color: #1d4ed8; }
+.btn-generate.intent   { background-color: #7e22ce; }
+}
+  
 .btn-copy {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 12px;
@@ -318,7 +325,7 @@ textarea {
   </div>
 
   <div class="action-bar">
-    <button class="btn-generate" style="color:#b91c1c" onclick="generate('cannibal')">Générer le prompt →</button>
+    <button class="btn-generate cannibal" onclick="generate('cannibal')">Générer le prompt →</button>
     <button class="btn-copy" id="copy-cannibal" onclick="copyPrompt('cannibal')">Copier le prompt</button>
   </div>
   <div class="output-label" id="label-cannibal">Prompt généré — prêt à coller dans Claude</div>
@@ -373,7 +380,7 @@ textarea {
   </div>
 
   <div class="action-bar">
-    <button class="btn-generate" style="color:#15803d" onclick="generate('opps')">Générer le prompt →</button>
+    <button class="btn-generate opps" onclick="generate('opps')">Générer le prompt →</button>
     <button class="btn-copy" id="copy-opps" onclick="copyPrompt('opps')">Copier le prompt</button>
   </div>
   <div class="output-label" id="label-opps">Prompt généré — prêt à coller dans Claude</div>
@@ -437,7 +444,7 @@ textarea {
   </div>
 
   <div class="action-bar">
-    <button class="btn-generate" style="color:#1d4ed8" onclick="generate('positions')">Générer le prompt →</button>
+    <button class="btn-generate positions" onclick="generate('positions')">Générer le prompt →</button>
     <button class="btn-copy" id="copy-positions" onclick="copyPrompt('positions')">Copier le prompt</button>
   </div>
   <div class="output-label" id="label-positions">Prompt généré — prêt à coller dans Claude</div>
@@ -484,7 +491,7 @@ textarea {
   </div>
 
   <div class="action-bar">
-    <button class="btn-generate" style="color:#7e22ce" onclick="generate('intent')">Générer le prompt →</button>
+    <button class="btn-generate intent" onclick="generate('intent')">Générer le prompt →</button>
     <button class="btn-copy" id="copy-intent" onclick="copyPrompt('intent')">Copier le prompt</button>
   </div>
   <div class="output-label" id="label-intent">Prompt généré — prêt à coller dans Claude</div>
