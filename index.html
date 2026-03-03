@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Selectra – Générateur de Prompts SEO</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Bricolage+Grotesque:wght@400;600;700;800&display=swap');
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #f9fafb;
+  font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+  min-height: 100vh;
+  color: #111827;
+}
+
+/* HEADER */
+header {
+  background: #111827;
+  padding: 28px 36px 24px;
+  border-bottom: 1px solid #1f2937;
+}
+.header-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: #6b7280;
+  margin-bottom: 6px;
+}
+header h1 {
+  font-size: 28px;
+  font-weight: 800;
+  color: #f9fafb;
+  letter-spacing: -0.02em;
+}
+.header-sources {
+  margin-top: 10px;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.source-badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+.dot-green { background: #4ade80; }
+.dot-red { background: #f87171; }
+
+/* TABS */
+.tabs {
+  display: flex;
+  background: #fff;
+  border-bottom: 2px solid #e5e7eb;
+  overflow-x: auto;
+}
+.tab {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 14px 28px;
+  border: none;
+  border-bottom: 3px solid transparent;
+  background: transparent;
+  color: #6b7280;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all .15s;
+  margin-bottom: -2px;
+}
+.tab:hover { color: #111827; }
+.tab.active-cannibal { color: #b91c1c; border-bottom-color: #b91c1c; font-weight: 600; }
+.tab.active-opps     { color: #15803d; border-bottom-color: #15803d; font-weight: 600; }
+.tab.active-positions{ color: #1d4ed8; border-bottom-color: #1d4ed8; font-weight: 600; }
+.tab.active-intent   { color: #7e22ce; border-bottom-color: #7e22ce; font-weight: 600; }
+
+/* PANELS */
+.panel { display: none; max-width: 900px; margin: 0 auto; padding: 32px 28px 60px; }
+.panel.active { display: block; }
+
+/* CONTEXT BANNER */
+.context-banner {
+  border-radius: 8px;
+  padding: 10px 16px;
+  margin-bottom: 24px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+}
+.banner-cannibal  { background: #fef2f2; border: 1px solid #fecaca; color: #b91c1c; }
+.banner-opps      { background: #f0fdf4; border: 1px solid #bbf7d0; color: #15803d; }
+.banner-positions { background: #eff6ff; border: 1px solid #bfdbfe; color: #1d4ed8; }
+.banner-intent    { background: #faf5ff; border: 1px solid #e9d5ff; color: #7e22ce; }
+
+/* FORM GRID */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+.field-full { grid-column: 1 / -1; }
+
+.field { display: flex; flex-direction: column; gap: 6px; }
+
+label.field-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.badge-auto {
+  font-size: 9px; padding: 1px 7px; border-radius: 3px;
+  background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0;
+  letter-spacing: .05em; text-transform: uppercase;
+}
+.badge-manual {
+  font-size: 9px; padding: 1px 7px; border-radius: 3px;
+  background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca;
+  letter-spacing: .05em; text-transform: uppercase;
+}
+
+input[type="text"], input[type="date"], select, textarea {
+  font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+  font-size: 13px;
+  color: #111827;
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 9px 12px;
+  outline: none;
+  width: 100%;
+  transition: border-color .15s;
+}
+input:focus, select:focus, textarea:focus { border-color: #6b7280; }
+input::placeholder, textarea::placeholder { color: #9ca3af; }
+textarea {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  line-height: 1.7;
+  resize: vertical;
+  min-height: 110px;
+}
+
+.export-hint {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: #9ca3af;
+  background: #f9fafb;
+  border: 1px dashed #d1d5db;
+  border-radius: 4px;
+  padding: 8px 10px;
+  line-height: 1.6;
+}
+
+/* CHECKBOXES / PILLS */
+.pills { display: flex; flex-wrap: wrap; gap: 6px; padding-top: 2px; }
+.pill {
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  color: #6b7280;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all .15s;
+  user-select: none;
+}
+.pill:hover { border-color: #6b7280; color: #111827; }
+
+/* Action bar */
+.action-bar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding-top: 8px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+.btn-generate {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 11px 24px;
+  border-radius: 6px;
+  border: 2px solid currentColor;
+  background: currentColor;
+  cursor: pointer;
+  transition: all .15s;
+  color: #fff;
+}
+.btn-copy {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 11px 24px;
+  border: 2px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+  color: #374151;
+  cursor: pointer;
+  transition: all .15s;
+  display: none;
+}
+.btn-copy:hover { border-color: #374151; }
+.btn-copy.visible { display: inline-block; }
+.btn-copy.success { background: #15803d; border-color: #15803d; color: #fff; }
+
+/* OUTPUT */
+.output-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #9ca3af;
+  margin-bottom: 10px;
+  display: none;
+}
+.output-label.visible { display: block; }
+.output-box {
+  background: #111827;
+  color: #d1d5db;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  line-height: 1.8;
+  padding: 20px;
+  border-radius: 8px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 420px;
+  overflow-y: auto;
+  display: none;
+}
+.output-box.visible { display: block; }
+.output-box::-webkit-scrollbar { width: 4px; }
+.output-box::-webkit-scrollbar-thumb { background: #374151; border-radius: 2px; }
+
+@media(max-width: 600px) {
+  header, .panel { padding-left: 18px; padding-right: 18px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .tab { padding: 12px 16px; font-size: 11px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-eyebrow">Selectra · Pôle Telecom · SEO Toolkit</div>
+  <h1>Générateur de Prompts d'Audit</h1>
+  <div class="header-sources">
+    <span class="source-badge"><span class="dot dot-green"></span><span style="color:#4ade80">Ahrefs connecté — données automatiques</span></span>
+    <span class="source-badge"><span class="dot dot-red"></span><span style="color:#f87171">GSC — export manuel requis</span></span>
+  </div>
+</header>
+
+<div class="tabs">
+  <button class="tab active-cannibal" onclick="switchTab('cannibal')">🔴 Cannibalisation</button>
+  <button class="tab" onclick="switchTab('opps')">🟢 Opportunités</button>
+  <button class="tab" onclick="switchTab('positions')">🔵 Évolutions</button>
+  <button class="tab" onclick="switchTab('intent')">🟣 Intention</button>
+</div>
+
+<!-- ===== CANNIBALISATION ===== -->
+<div class="panel active" id="panel-cannibal">
+  <div class="context-banner banner-cannibal">Export Ahrefs Organic Keywords requis · GSC optionnel</div>
+
+  <div class="form-grid">
+    <div class="field">
+      <label class="field-label">Site *</label>
+      <select id="c-site">
+        <option>Lafibreoptique.fr</option>
+        <option>Selectra English</option>
+        <option>Autre</option>
+      </select>
+    </div>
+    <div class="field">
+      <label class="field-label">Pays / marché</label>
+      <input type="text" id="c-country" value="France" placeholder="ex : France" />
+    </div>
+    <div class="field field-full">
+      <label class="field-label">Clusters / thématiques à auditer *</label>
+      <input type="text" id="c-clusters" placeholder="ex : box internet, fibre optique, comparatif opérateurs" />
+    </div>
+    <div class="field field-full">
+      <label class="field-label">Actions à considérer</label>
+      <div class="pills" id="c-actions">
+        <span class="pill active-pill" data-value="Redirection 301">Redirection 301</span>
+        <span class="pill active-pill" data-value="Noindex">Noindex</span>
+        <span class="pill active-pill" data-value="Fusion de contenu">Fusion de contenu</span>
+        <span class="pill active-pill" data-value="Déoptimisation">Déoptimisation</span>
+        <span class="pill" data-value="Maillage interne">Maillage interne</span>
+      </div>
+    </div>
+    <div class="field field-full">
+      <label class="field-label">Export Ahrefs — Organic Keywords * <span class="badge-manual">export requis</span></label>
+      <textarea id="c-export-ahrefs" placeholder="Colle ici ton export CSV Ahrefs (colonnes : Keyword, URL, Position, Volume, KD…)"></textarea>
+      <div class="export-hint">Ahrefs → Site Explorer → Organic Keywords → Export CSV → coller ici</div>
+    </div>
+    <div class="field field-full">
+      <label class="field-label">Export GSC — optionnel <span class="badge-manual">export requis</span></label>
+      <textarea id="c-export-gsc" placeholder="Optionnel : requêtes GSC avec URL, clics, impressions, CTR, position" style="min-height:70px"></textarea>
+    </div>
+  </div>
+
+  <div class="action-bar">
+    <button class="btn-generate" style="color:#b91c1c" onclick="generate('cannibal')">Générer le prompt →</button>
+    <button class="btn-copy" id="copy-cannibal" onclick="copyPrompt('cannibal')">Copier le prompt</button>
+  </div>
+  <div class="output-label" id="label-cannibal">Prompt généré — prêt à coller dans Claude</div>
+  <pre class="output-box" id="out-cannibal"></pre>
+</div>
+
+<!-- ===== OPPORTUNITÉS ===== -->
+<div class="panel" id="panel-opps">
+  <div class="context-banner banner-opps">Export GSC requis · Rank Tracker Ahrefs utilisé automatiquement</div>
+
+  <div class="form-grid">
+    <div class="field">
+      <label class="field-label">Site *</label>
+      <select id="o-site">
+        <option>Lafibreoptique.fr</option>
+        <option>Selectra English</option>
+        <option>Autre</option>
+      </select>
+    </div>
+    <div class="field">
+      <label class="field-label">Secteur</label>
+      <input type="text" id="o-sector" value="Fibre optique / Télécom" placeholder="ex : Télécom, Fibre…" />
+    </div>
+    <div class="field">
+      <label class="field-label">Pays</label>
+      <input type="text" id="o-country" value="France" placeholder="ex : France" />
+    </div>
+    <div class="field">
+      <label class="field-label">Volume minimum (recherches/mois)</label>
+      <input type="text" id="o-volume" value="100" placeholder="ex : 100" />
+    </div>
+    <div class="field field-full">
+      <label class="field-label">Clusters prioritaires</label>
+      <input type="text" id="o-clusters" placeholder="ex : fibre, box 4G, offres internet, comparatif" />
+    </div>
+    <div class="field field-full">
+      <label class="field-label">Types d'opportunités à détecter</label>
+      <div class="pills" id="o-types">
+        <span class="pill active-pill" data-value="Quick wins (positions 4-20)">Quick wins (pos. 4-20)</span>
+        <span class="pill active-pill" data-value="Contenus manquants à créer">Contenus manquants</span>
+        <span class="pill" data-value="Pages avec CTR anormalement bas">CTR anormalement bas</span>
+        <span class="pill" data-value="Mots-clés saisonniers à anticiper">Saisonnalité</span>
+      </div>
+    </div>
+    <div class="field field-full">
+      <label class="field-label">Export GSC — Requêtes * <span class="badge-manual">export requis</span></label>
+      <textarea id="o-export-gsc" placeholder="Colle ici ton export GSC : requête, clics, impressions, CTR, position moyenne"></textarea>
+      <div class="export-hint">GSC → Performance → Requêtes → Télécharger → coller ici</div>
+    </div>
+  </div>
+
+  <div class="action-bar">
+    <button class="btn-generate" style="color:#15803d" onclick="generate('opps')">Générer le prompt →</button>
+    <button class="btn-copy" id="copy-opps" onclick="copyPrompt('opps')">Copier le prompt</button>
+  </div>
+  <div class="output-label" id="label-opps">Prompt généré — prêt à coller dans Claude</div>
+  <pre class="output-box" id="out-opps"></pre>
+</div>
+
+<!-- ===== ÉVOLUTIONS ===== -->
+<div class="panel" id="panel-positions">
+  <div class="context-banner banner-positions">✓ Données récupérées automatiquement via Ahrefs Rank Tracker · GSC optionnel</div>
+
+  <div class="form-grid">
+    <div class="field">
+      <label class="field-label">Site *</label>
+      <select id="p-site">
+        <option>Lafibreoptique.fr</option>
+        <option>Selectra English</option>
+        <option>Autre</option>
+      </select>
+    </div>
+    <div class="field">
+      <label class="field-label">Pays</label>
+      <input type="text" id="p-country" value="France" />
+    </div>
+    <div class="field">
+      <label class="field-label">Période A — début *</label>
+      <input type="date" id="p-date-a1" />
+    </div>
+    <div class="field">
+      <label class="field-label">Période A — fin *</label>
+      <input type="date" id="p-date-a2" />
+    </div>
+    <div class="field">
+      <label class="field-label">Période B — début *</label>
+      <input type="date" id="p-date-b1" />
+    </div>
+    <div class="field">
+      <label class="field-label">Période B — fin *</label>
+      <input type="date" id="p-date-b2" />
+    </div>
+    <div class="field">
+      <label class="field-label">Seuil de variation</label>
+      <input type="text" id="p-threshold" value="±3 positions" />
+    </div>
+    <div class="field">
+      <label class="field-label">Hypothèses à explorer</label>
+      <div class="pills" id="p-hypotheses">
+        <span class="pill active-pill" data-value="Mise à jour Google">Mise à jour Google</span>
+        <span class="pill active-pill" data-value="Dégradation du contenu">Dégradation contenu</span>
+        <span class="pill active-pill" data-value="Nouveau concurrent">Nouveau concurrent</span>
+        <span class="pill active-pill" data-value="Problème technique">Problème technique</span>
+        <span class="pill active-pill" data-value="Cannibalisation">Cannibalisation</span>
+        <span class="pill" data-value="Saisonnalité">Saisonnalité</span>
+      </div>
+    </div>
+    <div class="field field-full">
+      <label class="field-label">Export GSC comparatif — optionnel <span class="badge-manual">export requis</span></label>
+      <textarea id="p-export-gsc" placeholder="Optionnel : export GSC avec comparaison de deux périodes" style="min-height:70px"></textarea>
+    </div>
+  </div>
+
+  <div class="action-bar">
+    <button class="btn-generate" style="color:#1d4ed8" onclick="generate('positions')">Générer le prompt →</button>
+    <button class="btn-copy" id="copy-positions" onclick="copyPrompt('positions')">Copier le prompt</button>
+  </div>
+  <div class="output-label" id="label-positions">Prompt généré — prêt à coller dans Claude</div>
+  <pre class="output-box" id="out-positions"></pre>
+</div>
+
+<!-- ===== INTENTION ===== -->
+<div class="panel" id="panel-intent">
+  <div class="context-banner banner-intent">Export Ahrefs Organic Keywords requis</div>
+
+  <div class="form-grid">
+    <div class="field">
+      <label class="field-label">Site *</label>
+      <select id="i-site">
+        <option>Lafibreoptique.fr</option>
+        <option>Selectra English</option>
+        <option>Autre</option>
+      </select>
+    </div>
+    <div class="field">
+      <label class="field-label">Secteur</label>
+      <input type="text" id="i-sector" value="Fibre optique / Télécom" />
+    </div>
+    <div class="field field-full">
+      <label class="field-label">Clusters / pages à prioriser</label>
+      <input type="text" id="i-clusters" placeholder="ex : comparatifs, guides, landing pages offres" />
+    </div>
+    <div class="field field-full">
+      <label class="field-label">Types d'intentions à classifier</label>
+      <div class="pills" id="i-intents">
+        <span class="pill active-pill" data-value="Informationnelle">Informationnelle</span>
+        <span class="pill active-pill" data-value="Commerciale">Commerciale</span>
+        <span class="pill active-pill" data-value="Transactionnelle">Transactionnelle</span>
+        <span class="pill active-pill" data-value="Navigationnelle">Navigationnelle</span>
+      </div>
+    </div>
+    <div class="field field-full">
+      <label class="field-label">Export Ahrefs — Organic Keywords + URLs * <span class="badge-manual">export requis</span></label>
+      <textarea id="i-export-ahrefs" placeholder="Colle ici ton export Ahrefs avec : Keyword, URL, Position, Volume"></textarea>
+      <div class="export-hint">Ahrefs → Site Explorer → Organic Keywords → Export CSV → coller ici</div>
+    </div>
+  </div>
+
+  <div class="action-bar">
+    <button class="btn-generate" style="color:#7e22ce" onclick="generate('intent')">Générer le prompt →</button>
+    <button class="btn-copy" id="copy-intent" onclick="copyPrompt('intent')">Copier le prompt</button>
+  </div>
+  <div class="output-label" id="label-intent">Prompt généré — prêt à coller dans Claude</div>
+  <pre class="output-box" id="out-intent"></pre>
+</div>
+
+<script>
+// ── TABS ──────────────────────────────────────────────────────
+const tabIds = ['cannibal', 'opps', 'positions', 'intent'];
+const tabColors = { cannibal: 'active-cannibal', opps: 'active-opps', positions: 'active-positions', intent: 'active-intent' };
+
+function switchTab(id) {
+  tabIds.forEach((t, i) => {
+    const tab = document.querySelectorAll('.tab')[i];
+    tab.className = 'tab' + (t === id ? ' ' + tabColors[t] : '');
+    document.getElementById('panel-' + t).classList.toggle('active', t === id);
+  });
+}
+
+// ── PILLS ─────────────────────────────────────────────────────
+const pillColors = {
+  'c-actions':    '#b91c1c',
+  'o-types':      '#15803d',
+  'p-hypotheses': '#1d4ed8',
+  'i-intents':    '#7e22ce',
+};
+
+document.querySelectorAll('.pills').forEach(group => {
+  const color = pillColors[group.id] || '#374151';
+  group.querySelectorAll('.pill').forEach(pill => {
+    // init
+    if (pill.classList.contains('active-pill')) {
+      pill.style.background = color;
+      pill.style.borderColor = color;
+      pill.style.color = '#fff';
+    }
+    pill.addEventListener('click', () => {
+      const on = pill.dataset.active === '1' || pill.classList.contains('active-pill');
+      if (on) {
+        pill.dataset.active = '0';
+        pill.classList.remove('active-pill');
+        pill.style.background = '#fff';
+        pill.style.borderColor = '#d1d5db';
+        pill.style.color = '#6b7280';
+      } else {
+        pill.dataset.active = '1';
+        pill.classList.add('active-pill');
+        pill.style.background = color;
+        pill.style.borderColor = color;
+        pill.style.color = '#fff';
+      }
+    });
+    // fix initial state
+    if (pill.classList.contains('active-pill')) pill.dataset.active = '1';
+  });
+});
+
+function getChecked(groupId) {
+  return Array.from(document.querySelectorAll('#' + groupId + ' .pill'))
+    .filter(p => p.dataset.active === '1' || (p.classList.contains('active-pill') && p.dataset.active !== '0'))
+    .map(p => p.dataset.value);
+}
+
+function v(id) { return (document.getElementById(id)?.value || '').trim(); }
+
+// ── GENERATORS ───────────────────────────────────────────────
+function generate(type) {
+  let prompt = '';
+
+  if (type === 'cannibal') {
+    const actions = getChecked('c-actions');
+    const exportAhrefs = v('c-export-ahrefs');
+    const exportGSC = v('c-export-gsc');
+    prompt =
+`Tu es un expert SEO spécialisé dans l'architecture de sites web.
+
+CONTEXTE
+Site    : ${v('c-site') || '[NOM DU SITE]'}
+Marché  : ${v('c-country') || 'France'}
+Clusters: ${v('c-clusters') || '[à préciser]'}
+
+MISSION
+Identifie tous les cas de cannibalisation : mots-clés (ou groupes sémantiques proches) pour lesquels plusieurs URLs du site apparaissent en compétition dans les SERPs.
+
+POUR CHAQUE CAS, fournis :
+1. Le mot-clé ou cluster concerné
+2. Les URLs en compétition
+3. L'URL "gagnante" recommandée (à conserver et renforcer)
+4. L'action sur l'URL "perdante" parmi : ${actions.join(', ')}
+5. Priorité : Haute / Moyenne / Faible
+6. Justification courte
+
+FORMAT DE SORTIE
+Tableau Markdown : Mot-clé | URL principale | URL cannibale | Action | Priorité | Justification
+Puis un résumé de 3 à 5 lignes sur les patterns de cannibalisation observés.
+
+─── EXPORT AHREFS — ORGANIC KEYWORDS ───
+${exportAhrefs || '[colle ici : Ahrefs → Site Explorer → Organic Keywords → Export CSV]'}
+${exportGSC ? '\n─── EXPORT GSC — OPTIONNEL ───\n' + exportGSC : ''}`;
+  }
+
+  else if (type === 'opps') {
+    const types = getChecked('o-types');
+    const exportGSC = v('o-export-gsc');
+    prompt =
+`Tu es un consultant SEO senior spécialisé dans la stratégie de contenu.
+
+CONTEXTE
+Site    : ${v('o-site') || '[NOM DU SITE]'}
+Secteur : ${v('o-sector') || '[secteur]'}
+Marché  : ${v('o-country') || 'France'}
+Volume minimum : ${v('o-volume') || '100'} recherches/mois
+${v('o-clusters') ? 'Clusters prioritaires : ' + v('o-clusters') : ''}
+
+MISSION
+Analyse les données GSC fournies et identifie :
+${types.map((t, i) => (i + 1) + '. ' + t).join('\n')}
+
+TYPE A — Quick wins (positions 4 à 20)
+Pour chaque mot-clé entre la position 4 et 20 :
+- Mot-clé + position actuelle + volume mensuel
+- URL positionnée
+- Recommandation concrète : enrichissement sémantique, title/H1, contenu, maillage interne…
+
+TYPE B — Contenus manquants
+Mots-clés à fort volume d'impressions, CTR < 2%, sans page dédiée.
+Suggère le type de contenu à créer et l'intention à cibler.
+
+CLASSEMENT : Fort / Moyen / Faible pour chaque opportunité.
+
+FORMAT DE SORTIE
+Tableau Markdown : Mot-clé | Type | Position | Volume | URL | Action | Potentiel
+Puis le top 3 des opportunités prioritaires.
+
+─── EXPORT GSC — REQUÊTES ───
+${exportGSC || '[colle ici : GSC → Performance → Requêtes → Télécharger]'}`;
+  }
+
+  else if (type === 'positions') {
+    const hypotheses = getChecked('p-hypotheses');
+    const exportGSC = v('p-export-gsc');
+    const threshold = v('p-threshold') || '±3 positions';
+    prompt =
+`Tu es un analyste SEO expert en interprétation de données de positionnement.
+
+CONTEXTE
+Site     : ${v('p-site') || '[NOM DU SITE]'}
+Marché   : ${v('p-country') || 'France'}
+Période A (référence) : ${v('p-date-a1') || '[date début]'} → ${v('p-date-a2') || '[date fin]'}
+Période B (récente)   : ${v('p-date-b1') || '[date début]'} → ${v('p-date-b2') || '[date fin]'}
+Seuil de variation    : ${threshold}
+
+NOTE : Les données de positionnement sont récupérées automatiquement depuis le Rank Tracker Ahrefs.
+
+MISSION — 3 sections :
+
+SECTION 1 — GAINS NOTABLES
+Mots-clés ayant progressé de ${threshold} ou plus, triés par volume décroissant.
+Colonnes : Mot-clé | Volume | Position A | Position B | Delta | URL
+
+SECTION 2 — CHUTES SIGNIFICATIVES
+Mots-clés ayant perdu ${threshold} ou plus.
+Pour chaque chute, propose une hypothèse parmi :
+${hypotheses.map(h => '- ' + h).join('\n')}
+Colonnes : Mot-clé | Volume | Position A | Position B | Delta | URL | Hypothèse
+
+SECTION 3 — TENDANCES GÉNÉRALES
+Résumé de 5 à 8 lignes : clusters qui progressent / régressent, visibilité globale, points d'attention prioritaires.
+${exportGSC ? '\n─── EXPORT GSC COMPARATIF ───\n' + exportGSC : ''}`;
+  }
+
+  else if (type === 'intent') {
+    const intents = getChecked('i-intents');
+    const exportAhrefs = v('i-export-ahrefs');
+    prompt =
+`Tu es un expert en stratégie de contenu SEO.
+
+CONTEXTE
+Site    : ${v('i-site') || '[NOM DU SITE]'}
+Secteur : ${v('i-sector') || '[secteur]'}
+${v('i-clusters') ? 'Clusters prioritaires : ' + v('i-clusters') : ''}
+
+MISSION
+Pour chaque mot-clé fourni avec son URL positionnée :
+
+A — CLASSIFICATION DE L'INTENTION
+Classe l'intention parmi : ${intents.join(', ')}
+- Informationnelle  : l'utilisateur veut comprendre ou apprendre
+- Commerciale       : l'utilisateur compare des offres
+- Transactionnelle  : l'utilisateur veut agir / souscrire / acheter
+- Navigationnelle   : l'utilisateur cherche une marque ou page précise
+
+B — ALIGNEMENT CONTENU / INTENTION
+✅ Aligné           — la page répond parfaitement
+⚠️ Partiellement   — ajustements possibles
+❌ Non aligné       — fort risque de taux de rebond élevé
+
+Pour les cas ⚠️ et ❌ : action corrective précise
+(reformulation éditoriale, ajout CTA, nouvelle page, redirection, refonte…)
+
+FORMAT DE SORTIE
+Tableau Markdown : Mot-clé | Volume | Intention | URL | Alignement | Action corrective
+Puis résumé des désalignements critiques à traiter en priorité.
+
+─── EXPORT AHREFS — ORGANIC KEYWORDS + URLs ───
+${exportAhrefs || '[colle ici : Ahrefs → Site Explorer → Organic Keywords → Export CSV]'}`;
+  }
+
+  document.getElementById('out-' + type).textContent = prompt;
+  document.getElementById('out-' + type).classList.add('visible');
+  document.getElementById('label-' + type).classList.add('visible');
+  document.getElementById('copy-' + type).classList.add('visible');
+  document.getElementById('out-' + type).scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── COPY ─────────────────────────────────────────────────────
+function copyPrompt(type) {
+  const text = document.getElementById('out-' + type).textContent;
+  const btn = document.getElementById('copy-' + type);
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copié ✓';
+    btn.classList.add('success');
+    setTimeout(() => {
+      btn.textContent = 'Copier le prompt';
+      btn.classList.remove('success');
+    }, 2000);
+  });
+}
+</script>
+</body>
+</html>
