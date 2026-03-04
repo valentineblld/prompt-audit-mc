@@ -252,12 +252,12 @@ textarea {
 <div class="tabs">
   <button class="tab active-hebdo" onclick="switchTab('hebdo')">🟡 Analyse Hebdomadaire</button>
   <button class="tab" onclick="switchTab('positions')">🔵 Évolutions</button>
-  <button class="tab" onclick="switchTab('opps')">🟢 Opportunités</button>
+  <button class="tab" onclick="switchTab('opps')">🟢 Quick Wins</button>
 </div>
 
-<!-- OPPORTUNITÉS -->
+<!-- QUICK WINS -->
 <div class="panel" id="panel-opps">
-  <div class="context-banner banner-opps">Export GSC requis · Rank Tracker Ahrefs utilisé automatiquement</div>
+  <div class="context-banner banner-opps">Export GSC requis · Filtrer en amont : position 4–20, impressions &gt; 50, période 3 mois</div>
   <div class="form-grid">
     <div class="field">
       <label class="field-label">Site *</label>
@@ -276,26 +276,21 @@ textarea {
       <input type="text" id="o-country" value="France" />
     </div>
     <div class="field">
-      <label class="field-label">Volume minimum (recherches/mois)</label>
-      <input type="text" id="o-volume" value="100" />
+      <label class="field-label">Fourchette de positions</label>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input type="text" id="o-pos-min" value="4" style="width:80px" />
+        <span style="color:#9ca3af;font-size:13px">→</span>
+        <input type="text" id="o-pos-max" value="20" style="width:80px" />
+      </div>
     </div>
     <div class="field field-full">
       <label class="field-label">Clusters prioritaires</label>
       <input type="text" id="o-clusters" placeholder="ex : fibre, box 4G, offres internet, comparatif" />
     </div>
     <div class="field field-full">
-      <label class="field-label">Types d'opportunités à détecter</label>
-      <div class="pills" id="o-types">
-        <span class="pill active-pill" data-value="Quick wins (positions 4-20)">Quick wins (pos. 4-20)</span>
-        <span class="pill active-pill" data-value="Contenus manquants à créer">Contenus manquants</span>
-        <span class="pill" data-value="Pages avec CTR anormalement bas">CTR anormalement bas</span>
-        <span class="pill" data-value="Mots-clés saisonniers à anticiper">Saisonnalité</span>
-      </div>
-    </div>
-    <div class="field field-full">
       <label class="field-label">Export GSC — Requêtes * <span class="badge-manual">export requis</span></label>
       <textarea id="o-export-gsc" placeholder="Colle ici ton export GSC : requête, clics, impressions, CTR, position moyenne"></textarea>
-      <div class="export-hint">GSC → Performance → Requêtes → Télécharger → coller ici</div>
+      <div class="export-hint">GSC → Performance → Requêtes → Filtrer (position 4–20, impressions &gt; 50, 3 derniers mois) → Télécharger → coller ici</div>
     </div>
   </div>
   <div class="action-bar">
@@ -421,7 +416,7 @@ function switchTab(id) {
   });
 }
 
-const pillColors = { 'o-types': '#15803d', 'p-hypotheses': '#1d4ed8' };
+const pillColors = { 'p-hypotheses': '#1d4ed8' };
 
 document.querySelectorAll('.pills').forEach(group => {
   const color = pillColors[group.id] || '#374151';
@@ -461,37 +456,46 @@ function generate(type) {
   let prompt = '';
 
   if (type === 'opps') {
-    const types = getChecked('o-types');
+    const site      = v('o-site') || '[NOM DU SITE]';
+    const sector    = v('o-sector') || '[secteur]';
+    const country   = v('o-country') || 'France';
+    const posMin    = v('o-pos-min') || '4';
+    const posMax    = v('o-pos-max') || '20';
+    const clusters  = v('o-clusters');
     const exportGSC = v('o-export-gsc');
+
     prompt =
-`Tu es un consultant SEO senior spécialisé dans la stratégie de contenu.
+`Tu es un consultant SEO senior. Je vais te fournir un export GSC pour le site ${site}.
 
 CONTEXTE
-Site    : ${v('o-site') || '[NOM DU SITE]'}
-Secteur : ${v('o-sector') || '[secteur]'}
-Marché  : ${v('o-country') || 'France'}
-Volume minimum : ${v('o-volume') || '100'} recherches/mois
-${v('o-clusters') ? 'Clusters prioritaires : ' + v('o-clusters') : ''}
+Site    : ${site}
+Secteur : ${sector}
+Marché  : ${country}
+${clusters ? 'Clusters prioritaires : ' + clusters : ''}
+
+DONNÉES FOURNIES
+Export GSC — Requêtes sur les 3 derniers mois, pré-filtré :
+- Position moyenne entre ${posMin} et ${posMax}
+- Impressions > 50
 
 MISSION
-Analyse les données GSC fournies et identifie :
-${types.map((t, i) => (i + 1) + '. ' + t).join('\n')}
+Identifie les quick wins les plus actionnables : mots-clés déjà bien positionnés qui peuvent gagner des places avec des optimisations légères.
 
-TYPE A — Quick wins (positions 4 à 20)
-Pour chaque mot-clé entre la position 4 et 20 :
-- Mot-clé + position actuelle + volume mensuel
-- URL positionnée
-- Recommandation concrète : enrichissement sémantique, title/H1, contenu, maillage interne…
-
-TYPE B — Contenus manquants
-Mots-clés à fort volume d'impressions, CTR < 2%, sans page dédiée.
-Suggère le type de contenu à créer et l'intention à cibler.
-
-CLASSEMENT : Fort / Moyen / Faible pour chaque opportunité.
+Pour chaque quick win, fournis :
+1. Le mot-clé + position actuelle + impressions + CTR
+2. L'URL positionnée
+3. Le gap estimé (nombre de positions à gagner pour atteindre le top 3)
+4. Une recommandation concrète et unique parmi :
+   - Optimisation title / H1
+   - Enrichissement sémantique du contenu
+   - Amélioration du maillage interne
+   - Reformulation de la meta description pour améliorer le CTR
+5. Priorité : Haute / Moyenne / Faible (basée sur les impressions et la position actuelle)
 
 FORMAT DE SORTIE
-Tableau Markdown : Mot-clé | Type | Position | Volume | URL | Action | Potentiel
-Puis le top 3 des opportunités prioritaires.
+Tableau Markdown : Mot-clé | Position | Impressions | CTR | URL | Recommandation | Priorité
+Trié par priorité décroissante.
+Puis un encadré "Top 5 actions immédiates" avec les 5 quick wins les plus impactants.
 
 ─── EXPORT GSC — REQUÊTES ───
 ${exportGSC || '[colle ici : GSC → Performance → Requêtes → Télécharger]'}`;
@@ -499,8 +503,8 @@ ${exportGSC || '[colle ici : GSC → Performance → Requêtes → Télécharger
 
   else if (type === 'positions') {
     const hypotheses = getChecked('p-hypotheses');
-    const exportGSC = v('p-export-gsc');
-    const threshold = v('p-threshold') || '±3 positions';
+    const exportGSC  = v('p-export-gsc');
+    const threshold  = v('p-threshold') || '±3 positions';
     prompt =
 `Tu es un analyste SEO expert en interprétation de données de positionnement.
 
@@ -535,10 +539,9 @@ ${exportGSC ? '\n─── EXPORT GSC COMPARATIF ───\n' + exportGSC : ''}`
     const lang       = v('h-lang') || 'français';
     const perimetre  = v('h-perimetre') || '[à préciser]';
     const marche     = v('h-marche') || '[à préciser]';
-    const filtre     = v('h-filtre') || 'aucun filtre';
     const exportData = v('h-export');
-    const today = new Date();
-    const dateStr = String(today.getDate()).padStart(2,'0') + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + today.getFullYear();
+    const today      = new Date();
+    const dateStr    = String(today.getDate()).padStart(2,'0') + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + today.getFullYear();
 
     prompt =
 `Tu es un analyste SEO expert en interprétation de données de positionnement.
