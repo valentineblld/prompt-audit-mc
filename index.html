@@ -554,7 +554,7 @@ STRUCTURE DU FICHIER
 Deux onglets : "Analyse Mots-Clés S-1" et "Synthèse".
 
 ONGLET ANALYSE
-Tableau avec les colonnes : Catégorie / Pos. moy. / Pos. moy. S-2 / Keyword / Volume / KD / Pos. actuelle / Variation / URL.
+Tableau avec les colonnes : Catégorie / Pos. moy. / Pos. moy. S-1 / Keyword / Volume / KD / Pos. actuelle / Variation / URL.
 
 Identifie les clusters à partir des URLs présentes dans l'export en regroupant les mots-clés par répertoire (ex : /guide/, /installation/, /comparer-les-offres/, /offre-fibre/orange/, etc.).
 Crée un cluster par répertoire principal, nomme-le de façon lisible, et sélectionne ~10 MC parmi les plus pertinents (volume + KD + pertinence thématique).
@@ -566,8 +566,8 @@ Pour la colonne "Variation" :
 - "New" (vert) pour les nouveaux MC sans historique
 - "Lost" (rouge) pour les MC perdus
 
-La position moyenne par cluster se calcule sur les ~10 MC sélectionnés.
-La "Pos. moy. S-2" est déduite via la colonne "Position change" de l'export.
+La position moyenne par cluster (colonne "Pos. moy.") se calcule sur les ~10 MC sélectionnés à partir de leur position actuelle.
+La colonne "Pos. moy. S-1" est la moyenne des positions S-1 de ces mêmes MC, lue directement depuis la colonne "Previous position" de l'export.
 
 ONGLET SYNTHÈSE
 Analyse courte en 4 blocs :
