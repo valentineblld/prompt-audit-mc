@@ -16,7 +16,6 @@ body {
   color: #111827;
 }
 
-/* HEADER */
 header {
   background: #111827;
   padding: 28px 36px 24px;
@@ -53,7 +52,6 @@ header h1 {
 .dot-green { background: #4ade80; }
 .dot-red { background: #f87171; }
 
-/* TABS */
 .tabs {
   display: flex;
   background: #fff;
@@ -76,16 +74,13 @@ header h1 {
   margin-bottom: -2px;
 }
 .tab:hover { color: #111827; }
-.tab.active-cannibal { color: #b91c1c; border-bottom-color: #b91c1c; font-weight: 600; }
-.tab.active-opps     { color: #15803d; border-bottom-color: #15803d; font-weight: 600; }
-.tab.active-positions{ color: #1d4ed8; border-bottom-color: #1d4ed8; font-weight: 600; }
-.tab.active-intent   { color: #7e22ce; border-bottom-color: #7e22ce; font-weight: 600; }
+.tab.active-opps      { color: #15803d; border-bottom-color: #15803d; font-weight: 600; }
+.tab.active-positions { color: #1d4ed8; border-bottom-color: #1d4ed8; font-weight: 600; }
+.tab.active-hebdo     { color: #b45309; border-bottom-color: #b45309; font-weight: 600; }
 
-/* PANELS */
 .panel { display: none; max-width: 900px; margin: 0 auto; padding: 32px 28px 60px; }
 .panel.active { display: block; }
 
-/* CONTEXT BANNER */
 .context-banner {
   border-radius: 8px;
   padding: 10px 16px;
@@ -93,12 +88,10 @@ header h1 {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 12px;
 }
-.banner-cannibal  { background: #fef2f2; border: 1px solid #fecaca; color: #b91c1c; }
 .banner-opps      { background: #f0fdf4; border: 1px solid #bbf7d0; color: #15803d; }
 .banner-positions { background: #eff6ff; border: 1px solid #bfdbfe; color: #1d4ed8; }
-.banner-intent    { background: #faf5ff; border: 1px solid #e9d5ff; color: #7e22ce; }
+.banner-hebdo     { background: #fffbeb; border: 1px solid #fde68a; color: #b45309; }
 
-/* FORM GRID */
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -106,7 +99,6 @@ header h1 {
   margin-bottom: 18px;
 }
 .field-full { grid-column: 1 / -1; }
-
 .field { display: flex; flex-direction: column; gap: 6px; }
 
 label.field-label {
@@ -118,11 +110,6 @@ label.field-label {
   display: flex;
   align-items: center;
   gap: 8px;
-}
-.badge-auto {
-  font-size: 9px; padding: 1px 7px; border-radius: 3px;
-  background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0;
-  letter-spacing: .05em; text-transform: uppercase;
 }
 .badge-manual {
   font-size: 9px; padding: 1px 7px; border-radius: 3px;
@@ -163,7 +150,6 @@ textarea {
   line-height: 1.6;
 }
 
-/* CHECKBOXES / PILLS */
 .pills { display: flex; flex-wrap: wrap; gap: 6px; padding-top: 2px; }
 .pill {
   padding: 5px 12px;
@@ -179,7 +165,6 @@ textarea {
 }
 .pill:hover { border-color: #6b7280; color: #111827; }
 
-/* Action bar */
 .action-bar {
   display: flex;
   gap: 10px;
@@ -195,19 +180,11 @@ textarea {
   text-transform: uppercase;
   padding: 11px 24px;
   border-radius: 6px;
-  border: 2px solid currentColor;
-  background: currentColor;  /* ← change ça en background-color si tu veux */
+  border: 2px solid transparent;
   cursor: pointer;
   transition: all .15s;
+  color: #fff;
 }
-
-/* NOUVELLES CLASSES POUR LES COULEURS */
-.btn-generate.cannibal { background-color: #b91c1c; }
-.btn-generate.opps     { background-color: #15803d; }
-.btn-generate.positions { background-color: #1d4ed8; }
-.btn-generate.intent   { background-color: #7e22ce; }
-}
-  
 .btn-copy {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 12px;
@@ -226,7 +203,6 @@ textarea {
 .btn-copy.visible { display: inline-block; }
 .btn-copy.success { background: #15803d; border-color: #15803d; color: #fff; }
 
-/* OUTPUT */
 .output-label {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 10px;
@@ -269,95 +245,39 @@ textarea {
   <h1>Générateur de Prompts d'Audit</h1>
   <div class="header-sources">
     <span class="source-badge"><span class="dot dot-green"></span><span style="color:#4ade80">Ahrefs connecté — données automatiques</span></span>
-    <span class="source-badge"><span class="dot dot-red"></span><span style="color:#f87171">GSC — export manuel requis</span></span>
+    <span class="source-badge"><span class="dot dot-red"></span><span style="color:#f87171">GSC / Ahrefs export — requis manuellement</span></span>
   </div>
 </header>
 
 <div class="tabs">
-  <button class="tab active-cannibal" onclick="switchTab('cannibal')">🔴 Cannibalisation</button>
-  <button class="tab" onclick="switchTab('opps')">🟢 Opportunités</button>
+  <button class="tab active-hebdo" onclick="switchTab('hebdo')">🟡 Analyse Hebdomadaire</button>
   <button class="tab" onclick="switchTab('positions')">🔵 Évolutions</button>
-  <button class="tab" onclick="switchTab('intent')">🟣 Intention</button>
+  <button class="tab" onclick="switchTab('opps')">🟢 Opportunités</button>
 </div>
 
-<!-- ===== CANNIBALISATION ===== -->
-<div class="panel active" id="panel-cannibal">
-  <div class="context-banner banner-cannibal">Export Ahrefs Organic Keywords requis · GSC optionnel</div>
-
-  <div class="form-grid">
-    <div class="field">
-      <label class="field-label">Site *</label>
-      <select id="c-site">
-        <option>https://www.lafibreoptique.fr/</option>
-        <option>https://en.selectra.info/broadband-phone-france</option>
-        <option>https://selectra.info/telecom</option>
-        <option>https://www.echosdunet.net/</option>
-        <option>https://www.jechange.fr/telecom/internet/</option>
-      </select>
-    </div>
-    <div class="field">
-      <label class="field-label">Pays / marché</label>
-      <input type="text" id="c-country" value="France" placeholder="ex : France" />
-    </div>
-    <div class="field field-full">
-      <label class="field-label">Clusters / thématiques à auditer *</label>
-      <input type="text" id="c-clusters" placeholder="ex : box internet, fibre optique, comparatif opérateurs" />
-    </div>
-    <div class="field field-full">
-      <label class="field-label">Actions à considérer</label>
-      <div class="pills" id="c-actions">
-        <span class="pill active-pill" data-value="Redirection 301">Redirection 301</span>
-        <span class="pill active-pill" data-value="Noindex">Noindex</span>
-        <span class="pill active-pill" data-value="Fusion de contenu">Fusion de contenu</span>
-        <span class="pill active-pill" data-value="Déoptimisation">Déoptimisation</span>
-        <span class="pill" data-value="Maillage interne">Maillage interne</span>
-      </div>
-    </div>
-    <div class="field field-full">
-      <label class="field-label">Export Ahrefs — Organic Keywords * <span class="badge-manual">export requis</span></label>
-      <textarea id="c-export-ahrefs" placeholder="Colle ici ton export CSV Ahrefs (colonnes : Keyword, URL, Position, Volume, KD…)"></textarea>
-      <div class="export-hint">Ahrefs → Site Explorer → Organic Keywords → Export CSV → coller ici</div>
-    </div>
-    <div class="field field-full">
-      <label class="field-label">Export GSC — optionnel <span class="badge-manual">export requis</span></label>
-      <textarea id="c-export-gsc" placeholder="Optionnel : requêtes GSC avec URL, clics, impressions, CTR, position" style="min-height:70px"></textarea>
-    </div>
-  </div>
-
-  <div class="action-bar">
-    <button class="btn-generate cannibal" onclick="generate('cannibal')">Générer le prompt →</button>
-    <button class="btn-copy" id="copy-cannibal" onclick="copyPrompt('cannibal')">Copier le prompt</button>
-  </div>
-  <div class="output-label" id="label-cannibal">Prompt généré — prêt à coller dans Claude</div>
-  <pre class="output-box" id="out-cannibal"></pre>
-</div>
-
-<!-- ===== OPPORTUNITÉS ===== -->
+<!-- OPPORTUNITÉS -->
 <div class="panel" id="panel-opps">
   <div class="context-banner banner-opps">Export GSC requis · Rank Tracker Ahrefs utilisé automatiquement</div>
-
   <div class="form-grid">
     <div class="field">
       <label class="field-label">Site *</label>
       <select id="o-site">
-        <option>https://www.lafibreoptique.fr/</option>
-        <option>https://en.selectra.info/broadband-phone-france</option>
-        <option>https://selectra.info/telecom</option>
-        <option>https://www.echosdunet.net/</option>
-        <option>https://www.jechange.fr/telecom/internet/</option>
+        <option>Lafibreoptique.fr</option>
+        <option>Selectra English</option>
+        <option>Autre</option>
       </select>
     </div>
     <div class="field">
       <label class="field-label">Secteur</label>
-      <input type="text" id="o-sector" value="Fibre optique / Télécom" placeholder="ex : Télécom, Fibre…" />
+      <input type="text" id="o-sector" value="Fibre optique / Télécom" />
     </div>
     <div class="field">
       <label class="field-label">Pays</label>
-      <input type="text" id="o-country" value="France" placeholder="ex : France" />
+      <input type="text" id="o-country" value="France" />
     </div>
     <div class="field">
       <label class="field-label">Volume minimum (recherches/mois)</label>
-      <input type="text" id="o-volume" value="100" placeholder="ex : 100" />
+      <input type="text" id="o-volume" value="100" />
     </div>
     <div class="field field-full">
       <label class="field-label">Clusters prioritaires</label>
@@ -378,28 +298,24 @@ textarea {
       <div class="export-hint">GSC → Performance → Requêtes → Télécharger → coller ici</div>
     </div>
   </div>
-
   <div class="action-bar">
-    <button class="btn-generate opps" onclick="generate('opps')">Générer le prompt →</button>
+    <button class="btn-generate" style="background:#15803d;border-color:#15803d" onclick="generate('opps')">Générer le prompt →</button>
     <button class="btn-copy" id="copy-opps" onclick="copyPrompt('opps')">Copier le prompt</button>
   </div>
   <div class="output-label" id="label-opps">Prompt généré — prêt à coller dans Claude</div>
   <pre class="output-box" id="out-opps"></pre>
 </div>
 
-<!-- ===== ÉVOLUTIONS ===== -->
+<!-- ÉVOLUTIONS -->
 <div class="panel" id="panel-positions">
   <div class="context-banner banner-positions">✓ Données récupérées automatiquement via Ahrefs Rank Tracker · GSC optionnel</div>
-
   <div class="form-grid">
     <div class="field">
       <label class="field-label">Site *</label>
       <select id="p-site">
-        <option>https://www.lafibreoptique.fr/</option>
-        <option>https://en.selectra.info/broadband-phone-france</option>
-        <option>https://selectra.info/telecom</option>
-        <option>https://www.echosdunet.net/</option>
-        <option>https://www.jechange.fr/telecom/internet/</option>
+        <option>Lafibreoptique.fr</option>
+        <option>Selectra English</option>
+        <option>Autre</option>
       </select>
     </div>
     <div class="field">
@@ -442,66 +358,64 @@ textarea {
       <textarea id="p-export-gsc" placeholder="Optionnel : export GSC avec comparaison de deux périodes" style="min-height:70px"></textarea>
     </div>
   </div>
-
   <div class="action-bar">
-    <button class="btn-generate positions" onclick="generate('positions')">Générer le prompt →</button>
+    <button class="btn-generate" style="background:#1d4ed8;border-color:#1d4ed8" onclick="generate('positions')">Générer le prompt →</button>
     <button class="btn-copy" id="copy-positions" onclick="copyPrompt('positions')">Copier le prompt</button>
   </div>
   <div class="output-label" id="label-positions">Prompt généré — prêt à coller dans Claude</div>
   <pre class="output-box" id="out-positions"></pre>
 </div>
 
-<!-- ===== INTENTION ===== -->
-<div class="panel" id="panel-intent">
-  <div class="context-banner banner-intent">Export Ahrefs Organic Keywords requis</div>
-
+<!-- ANALYSE HEBDOMADAIRE -->
+<div class="panel active" id="panel-hebdo">
+  <div class="context-banner banner-hebdo">Export Ahrefs Organic Keywords requis · Génère un fichier Excel d'analyse par cluster</div>
   <div class="form-grid">
     <div class="field">
       <label class="field-label">Site *</label>
-      <select id="i-site">
-        <option>https://www.lafibreoptique.fr/</option>
-        <option>https://en.selectra.info/broadband-phone-france</option>
-        <option>https://selectra.info/telecom</option>
-        <option>https://www.echosdunet.net/</option>
-        <option>https://www.jechange.fr/telecom/internet/</option>
+      <select id="h-site">
+        <option value="lafibreoptique.fr">Lafibreoptique.fr</option>
+        <option value="en.selectra.info">Selectra English</option>
+        <option value="echosdunet.net">Echosdunet.net</option>
+        <option value="selectra.info">Selectra.info</option>
+        <option value="jechange.fr">Jechange.fr</option>
       </select>
     </div>
     <div class="field">
-      <label class="field-label">Secteur</label>
-      <input type="text" id="i-sector" value="Fibre optique / Télécom" />
+      <label class="field-label">Langue de sortie</label>
+      <select id="h-lang">
+        <option value="français">Français</option>
+        <option value="anglais">Anglais</option>
+      </select>
+    </div>
+    <div class="field">
+      <label class="field-label">Périmètre *</label>
+      <input type="text" id="h-perimetre" placeholder="ex : multi-opérateurs / opérateur seul / multi-marché" />
+    </div>
+    <div class="field">
+      <label class="field-label">Marché(s) analysé(s) *</label>
+      <input type="text" id="h-marche" placeholder="ex : fibre / fibre + ADSL + mobile / broadband expats" />
     </div>
     <div class="field field-full">
-      <label class="field-label">Clusters / pages à prioriser</label>
-      <input type="text" id="i-clusters" placeholder="ex : comparatifs, guides, landing pages offres" />
+      <label class="field-label">Filtre mots-clés</label>
+      <input type="text" id="h-filtre" placeholder="ex : contient 'fibre' / contient 'box' / aucun filtre" />
     </div>
     <div class="field field-full">
-      <label class="field-label">Types d'intentions à classifier</label>
-      <div class="pills" id="i-intents">
-        <span class="pill active-pill" data-value="Informationnelle">Informationnelle</span>
-        <span class="pill active-pill" data-value="Commerciale">Commerciale</span>
-        <span class="pill active-pill" data-value="Transactionnelle">Transactionnelle</span>
-        <span class="pill active-pill" data-value="Navigationnelle">Navigationnelle</span>
-      </div>
-    </div>
-    <div class="field field-full">
-      <label class="field-label">Export Ahrefs — Organic Keywords + URLs * <span class="badge-manual">export requis</span></label>
-      <textarea id="i-export-ahrefs" placeholder="Colle ici ton export Ahrefs avec : Keyword, URL, Position, Volume"></textarea>
-      <div class="export-hint">Ahrefs → Site Explorer → Organic Keywords → Export CSV → coller ici</div>
+      <label class="field-label">Export Ahrefs — Organic Keywords * <span class="badge-manual">export requis</span></label>
+      <textarea id="h-export" placeholder="Colle ici ton export CSV Ahrefs (colonnes attendues : Keyword, URL, Position, Volume, KD, Position change…)"></textarea>
+      <div class="export-hint">Ahrefs → Site Explorer → Organic Keywords → Export CSV → coller ici. La colonne "Position change" est indispensable pour calculer les variations S-1.</div>
     </div>
   </div>
-
   <div class="action-bar">
-    <button class="btn-generate intent" onclick="generate('intent')">Générer le prompt →</button>
-    <button class="btn-copy" id="copy-intent" onclick="copyPrompt('intent')">Copier le prompt</button>
+    <button class="btn-generate" style="background:#b45309;border-color:#b45309" onclick="generate('hebdo')">Générer le prompt →</button>
+    <button class="btn-copy" id="copy-hebdo" onclick="copyPrompt('hebdo')">Copier le prompt</button>
   </div>
-  <div class="output-label" id="label-intent">Prompt généré — prêt à coller dans Claude</div>
-  <pre class="output-box" id="out-intent"></pre>
+  <div class="output-label" id="label-hebdo">Prompt généré — prêt à coller dans Claude</div>
+  <pre class="output-box" id="out-hebdo"></pre>
 </div>
 
 <script>
-// ── TABS ──────────────────────────────────────────────────────
-const tabIds = ['cannibal', 'opps', 'positions', 'intent'];
-const tabColors = { cannibal: 'active-cannibal', opps: 'active-opps', positions: 'active-positions', intent: 'active-intent' };
+const tabIds    = ['hebdo', 'positions', 'opps'];
+const tabColors = { opps: 'active-opps', positions: 'active-positions', hebdo: 'active-hebdo' };
 
 function switchTab(id) {
   tabIds.forEach((t, i) => {
@@ -511,89 +425,46 @@ function switchTab(id) {
   });
 }
 
-// ── PILLS ─────────────────────────────────────────────────────
-const pillColors = {
-  'c-actions':    '#b91c1c',
-  'o-types':      '#15803d',
-  'p-hypotheses': '#1d4ed8',
-  'i-intents':    '#7e22ce',
-};
+const pillColors = { 'o-types': '#15803d', 'p-hypotheses': '#1d4ed8' };
 
 document.querySelectorAll('.pills').forEach(group => {
   const color = pillColors[group.id] || '#374151';
   group.querySelectorAll('.pill').forEach(pill => {
-    // init
     if (pill.classList.contains('active-pill')) {
       pill.style.background = color;
       pill.style.borderColor = color;
       pill.style.color = '#fff';
+      pill.dataset.active = '1';
     }
     pill.addEventListener('click', () => {
-      const on = pill.dataset.active === '1' || pill.classList.contains('active-pill');
+      const on = pill.dataset.active === '1';
       if (on) {
         pill.dataset.active = '0';
-        pill.classList.remove('active-pill');
         pill.style.background = '#fff';
         pill.style.borderColor = '#d1d5db';
         pill.style.color = '#6b7280';
       } else {
         pill.dataset.active = '1';
-        pill.classList.add('active-pill');
         pill.style.background = color;
         pill.style.borderColor = color;
         pill.style.color = '#fff';
       }
     });
-    // fix initial state
-    if (pill.classList.contains('active-pill')) pill.dataset.active = '1';
   });
 });
 
 function getChecked(groupId) {
   return Array.from(document.querySelectorAll('#' + groupId + ' .pill'))
-    .filter(p => p.dataset.active === '1' || (p.classList.contains('active-pill') && p.dataset.active !== '0'))
+    .filter(p => p.dataset.active === '1')
     .map(p => p.dataset.value);
 }
 
 function v(id) { return (document.getElementById(id)?.value || '').trim(); }
 
-// ── GENERATORS ───────────────────────────────────────────────
 function generate(type) {
   let prompt = '';
 
-  if (type === 'cannibal') {
-    const actions = getChecked('c-actions');
-    const exportAhrefs = v('c-export-ahrefs');
-    const exportGSC = v('c-export-gsc');
-    prompt =
-`Tu es un expert SEO spécialisé dans l'architecture de sites web.
-
-CONTEXTE
-Site    : ${v('c-site') || '[NOM DU SITE]'}
-Marché  : ${v('c-country') || 'France'}
-Clusters: ${v('c-clusters') || '[à préciser]'}
-
-MISSION
-Identifie tous les cas de cannibalisation : mots-clés (ou groupes sémantiques proches) pour lesquels plusieurs URLs du site apparaissent en compétition dans les SERPs.
-
-POUR CHAQUE CAS, fournis :
-1. Le mot-clé ou cluster concerné
-2. Les URLs en compétition
-3. L'URL "gagnante" recommandée (à conserver et renforcer)
-4. L'action sur l'URL "perdante" parmi : ${actions.join(', ')}
-5. Priorité : Haute / Moyenne / Faible
-6. Justification courte
-
-FORMAT DE SORTIE
-Tableau Markdown : Mot-clé | URL principale | URL cannibale | Action | Priorité | Justification
-Puis un résumé de 3 à 5 lignes sur les patterns de cannibalisation observés.
-
-─── EXPORT AHREFS — ORGANIC KEYWORDS ───
-${exportAhrefs || '[colle ici : Ahrefs → Site Explorer → Organic Keywords → Export CSV]'}
-${exportGSC ? '\n─── EXPORT GSC — OPTIONNEL ───\n' + exportGSC : ''}`;
-  }
-
-  else if (type === 'opps') {
+  if (type === 'opps') {
     const types = getChecked('o-types');
     const exportGSC = v('o-export-gsc');
     prompt =
@@ -663,41 +534,66 @@ Résumé de 5 à 8 lignes : clusters qui progressent / régressent, visibilité 
 ${exportGSC ? '\n─── EXPORT GSC COMPARATIF ───\n' + exportGSC : ''}`;
   }
 
-  else if (type === 'intent') {
-    const intents = getChecked('i-intents');
-    const exportAhrefs = v('i-export-ahrefs');
+  else if (type === 'hebdo') {
+    const site       = v('h-site') || 'lafibreoptique.fr';
+    const lang       = v('h-lang') || 'français';
+    const perimetre  = v('h-perimetre') || '[à préciser]';
+    const marche     = v('h-marche') || '[à préciser]';
+    const filtre     = v('h-filtre') || 'aucun filtre';
+    const exportData = v('h-export');
+    const today = new Date();
+    const dateStr = String(today.getDate()).padStart(2,'0') + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + today.getFullYear();
+
     prompt =
-`Tu es un expert en stratégie de contenu SEO.
+`Je te joins un export Ahrefs pour ${site}. Génère le fichier Excel d'analyse hebdomadaire selon les instructions ci-dessous.
 
-CONTEXTE
-Site    : ${v('i-site') || '[NOM DU SITE]'}
-Secteur : ${v('i-sector') || '[secteur]'}
-${v('i-clusters') ? 'Clusters prioritaires : ' + v('i-clusters') : ''}
+CHAMPS DE CONTEXTE
+Site                  : ${site}
+Périmètre             : ${perimetre}
+Marché(s) analysé(s)  : ${marche}
+Langue de sortie      : ${lang}
+Filtre MC appliqué    : ${filtre}
 
-MISSION
-Pour chaque mot-clé fourni avec son URL positionnée :
+STRUCTURE DU FICHIER
+Deux onglets : "Analyse Mots-Clés S-1" et "Synthèse".
 
-A — CLASSIFICATION DE L'INTENTION
-Classe l'intention parmi : ${intents.join(', ')}
-- Informationnelle  : l'utilisateur veut comprendre ou apprendre
-- Commerciale       : l'utilisateur compare des offres
-- Transactionnelle  : l'utilisateur veut agir / souscrire / acheter
-- Navigationnelle   : l'utilisateur cherche une marque ou page précise
+ONGLET ANALYSE
+Tableau avec les colonnes : Catégorie / Pos. moy. / Pos. moy. S-2 / Keyword / Volume / KD / Pos. actuelle / Variation / URL.
 
-B — ALIGNEMENT CONTENU / INTENTION
-✅ Aligné           — la page répond parfaitement
-⚠️ Partiellement   — ajustements possibles
-❌ Non aligné       — fort risque de taux de rebond élevé
+Identifie les clusters pertinents en fonction du périmètre et du marché renseignés ci-dessus.
+À titre d'exemple, voici les clusters utilisés selon le type de site :
+- Site fibre uniquement (ex : LFO multi-op) → Comparatif / Guides / Installation / Éligibilité / Déploiement
+- Site télécom multi-thématique (ex : Echosdunet) → adapter selon les thématiques présentes dans l'export (fibre, ADSL, mobile, box 4G/5G, satellite…)
+- Site multi-marché (ex : Selectra, Jechange) → restreindre l'analyse au marché renseigné dans "Marché(s) analysé(s)" et créer les clusters en conséquence
+- Site en anglais (ex : Selectra English) → clusters et synthèse en anglais, adapter les thématiques au marché expat (broadband, energy, banking…)
 
-Pour les cas ⚠️ et ❌ : action corrective précise
-(reformulation éditoriale, ajout CTA, nouvelle page, redirection, refonte…)
+Pour chaque cluster, sélectionne ~10 mots-clés parmi les plus pertinents (volume + KD + pertinence thématique).
+Les clusters et les URLs de référence sont à déduire de l'export fourni.
 
-FORMAT DE SORTIE
-Tableau Markdown : Mot-clé | Volume | Intention | URL | Alignement | Action corrective
-Puis résumé des désalignements critiques à traiter en priorité.
+Pour la colonne "Pos. actuelle" : indique toujours la position numérique, y compris pour les nouveaux mots-clés.
+Pour la colonne "Variation" :
+- ▲ +X (vert) / ▼ -X (rouge) pour les variations
+- "New" (vert) pour les nouveaux MC sans historique
+- "Lost" (rouge) pour les MC perdus
 
-─── EXPORT AHREFS — ORGANIC KEYWORDS + URLs ───
-${exportAhrefs || '[colle ici : Ahrefs → Site Explorer → Organic Keywords → Export CSV]'}`;
+La position moyenne par cluster se calcule sur les ~10 MC sélectionnés.
+La "Pos. moy. S-2" est déduite via la colonne "Position change" de l'export.
+
+ONGLET SYNTHÈSE
+Analyse courte en 4 blocs :
+🟢 Points positifs
+🔴 Points de vigilance
+📊 Tendances par cluster
+💡 Actions recommandées
+Rédigée en ${lang}.
+
+RAPPEL TECHNIQUE
+- Export Ahrefs = positions du jour vs S-1
+- La colonne "Position change" = évolution vs S-1
+- Nom du fichier de sortie : analyse_keywords_${site}_${dateStr}.xlsx
+
+─── EXPORT AHREFS — ORGANIC KEYWORDS ───
+${exportData || '[colle ici : Ahrefs → Site Explorer → Organic Keywords → Export CSV]'}`;
   }
 
   document.getElementById('out-' + type).textContent = prompt;
@@ -707,17 +603,13 @@ ${exportAhrefs || '[colle ici : Ahrefs → Site Explorer → Organic Keywords �
   document.getElementById('out-' + type).scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// ── COPY ─────────────────────────────────────────────────────
 function copyPrompt(type) {
   const text = document.getElementById('out-' + type).textContent;
-  const btn = document.getElementById('copy-' + type);
+  const btn  = document.getElementById('copy-' + type);
   navigator.clipboard.writeText(text).then(() => {
     btn.textContent = 'Copié ✓';
     btn.classList.add('success');
-    setTimeout(() => {
-      btn.textContent = 'Copier le prompt';
-      btn.classList.remove('success');
-    }, 2000);
+    setTimeout(() => { btn.textContent = 'Copier le prompt'; btn.classList.remove('success'); }, 2000);
   });
 }
 </script>
