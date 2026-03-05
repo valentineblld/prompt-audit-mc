@@ -339,6 +339,12 @@ meilleure box internet
 fibre orange avis
 installer fibre optique" style="min-height:80px"></textarea>
     </div>
+    <div class="field field-full">
+  <label class="field-label">Export Ahrefs — Organic Keywords <span style="font-size:9px;padding:1px 7px;border-radius:3px;background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0;letter-spacing:.05em;text-transform:uppercase">optionnel</span></label>
+  <textarea id="x-export" placeholder="Optionnel : colle ici ton export CSV Ahrefs si tu veux t'assurer qu'aucune donnée n'est inventée.
+Sinon, laisse vide — Claude interrogera le connecteur Ahrefs directement." style="min-height:70px"></textarea>
+  <div class="export-hint">💡 Recommandé : joint l'export en PDF directement dans Claude plutôt qu'en CSV ici : le prompt reste lisible et les données sont garanties.</div>
+</div>
   </div>
   <div class="action-bar">
     <button class="btn-generate" style="background:#7e22ce;border-color:#7e22ce" onclick="generate('optims')">Générer le prompt →</button>
@@ -558,6 +564,7 @@ ${exportData || '[colle ici : Ahrefs → Site Explorer → Organic Keywords → 
     const lang    = v('x-lang') || 'Français';
     const urls    = v('x-urls') || '[liste des URLs à surveiller]';
     const kws     = v('x-kw');
+    const xExport = v('x-export');
     const today   = new Date();
     const dateStr = String(today.getDate()).padStart(2,'0') + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + today.getFullYear();
 
@@ -591,8 +598,9 @@ Rédigé en ${lang}.
 RAPPEL TECHNIQUE
 - Utilise la colonne "Previous position" pour la Pos. S-1
 - Utilise la colonne "Position" pour la Pos. Actuelle
-- Récupère les données directement via le connecteur Ahrefs (Site Explorer → Organic Keywords) pour chacune des URLs listées ci-dessus`;
-  }
+- Récupère les données directement via le connecteur Ahrefs (Site Explorer → Organic Keywords) pour chacune des URLs listées ci-dessus
+
+${xExport ? '\n─── EXPORT AHREFS — ORGANIC KEYWORDS ───\n' + xExport : '\nSi un export Ahrefs a été joint en PDF dans cette conversation, utilise-le en priorité. Sinon, récupère les données via le connecteur.'}`;
 
   else if (type === 'positions') {
     const hypotheses = getChecked('p-hypotheses');
