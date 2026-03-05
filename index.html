@@ -241,11 +241,11 @@ textarea {
 <body>
 
 <header>
-  <div class="header-eyebrow">Selectra · Pôle Telecom · SEO Toolkit</div>
-  <h1>Générateur de Prompts d'Audit</h1>
+  <div class="header-eyebrow">Selectra · Content France · SEO Toolkit</div>
+  <h1>Générateur de Prompts – Audit des Mots-clés & Positions</h1>
   <div class="header-sources">
-    <span class="source-badge"><span class="dot dot-green"></span><span style="color:#4ade80">Ahrefs connecté — données automatiques</span></span>
-    <span class="source-badge"><span class="dot dot-red"></span><span style="color:#f87171">GSC / Ahrefs export — requis manuellement</span></span>
+    <span class="source-badge"><span class="dot dot-green"></span><span style="color:#4ade80">Ahrefs Rank Tracker connecté — données automatiques</span></span>
+    <span class="source-badge"><span class="dot dot-red"></span><span style="color:#f87171">Export GSC / Ahrefs Site explorer (organic keywords) — requis manuellement</span></span>
   </div>
 </header>
 
@@ -287,7 +287,7 @@ textarea {
       <label class="field-label">Export GSC — Requêtes * <span class="badge-manual">export requis</span></label>
       <textarea id="o-export-gsc" placeholder="Colle ici ton export GSC : requête, clics, impressions, CTR, position moyenne
 OU ajoute le directement dans Claude."></textarea>
-      <div class="export-hint">GSC → Performance → Requêtes → Filtrer (position 4–20, impressions &gt; 50, 3 derniers mois) → Télécharger → coller ici</div>
+      <div class="export-hint">GSC → Performance → Requêtes → Filtrer (position 4–20, impressions &gt; 50, 3 derniers mois) → Télécharger → coller ici ou ajouter le fichier dans Claude.</div>
     </div>
   </div>
   <div class="action-bar">
@@ -381,7 +381,9 @@ OU ajoute le directement dans Claude."></textarea>
       <label class="field-label">Export Ahrefs — Organic Keywords * <span class="badge-manual">export requis</span></label>
       <textarea id="h-export" placeholder="Colle ici ton export CSV Ahrefs (colonnes attendues : Keyword, URL, Position, Volume, KD, Position change…)
 OU ajoute le directement dans Claude."></textarea>
-      <div class="export-hint">Ahrefs → Site Explorer → Organic Keywords → Export CSV → coller ici. La colonne "Position change" est indispensable pour calculer les variations S-1.</div>
+      <div class="export-hint">Ahrefs → Site Explorer → Organic Keywords → Export CSV → coller ici ou ajouter le fichier dans Claude.
+Colonnes obligatoires : Keyword, Volume, Previous position, Current position, Position change, Current URL
+~ 500 lignes max.</div>
     </div>
   </div>
   <div class="action-bar">
