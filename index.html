@@ -311,11 +311,11 @@ Colonnes obligatoires : Keyword, Volume, Previous position, Current position, Po
 
 <!-- SUIVI OPTIMISATIONS -->
 <div class="panel" id="panel-optims">
-  <div class="context-banner banner-optims">✓ Données récupérées automatiquement via le connecteur Ahrefs · Aucun export requis</div>
+  <div class="context-banner banner-optims">Export Ahrefs Organic Keywords optionnel mais recommandé · Sinon, données récupérées automatiquement via le connecteur Ahrefs (à tester)</div>
   <div class="form-grid">
     <div class="field">
-      <label class="field-label">Site * <span class="badge-auto">connecteur auto</span></label>
-      <input type="text" id="x-site" placeholder="ex : lafibreoptique.fr" />
+      <label class="field-label">Site</label>
+      <input type="text" id="x-site" placeholder="ex : selectra.info" />
     </div>
     <div class="field">
       <label class="field-label">Langue de sortie</label>
@@ -330,7 +330,7 @@ Colonnes obligatoires : Keyword, Volume, Previous position, Current position, Po
 https://lafibreoptique.fr/guide/installer-la-fibre/
 https://lafibreoptique.fr/offre-fibre/orange/
 https://lafibreoptique.fr/comparatif-box/" style="min-height:100px"></textarea>
-      <div class="export-hint">Ces URLs seront interrogées une par une via le connecteur Ahrefs — pas besoin d'export manuel.</div>
+      <div class="export-hint">Ces URLs seront interrogées une par une via le connecteur Ahrefs ou l'export fourni selon la méthode choisie.</div>
     </div>
     <div class="field field-full">
       <label class="field-label">Mots-clés "Top Priorité" — optionnel</label>
@@ -591,7 +591,7 @@ Rédigé en ${lang}.
 RAPPEL TECHNIQUE
 - Utilise la colonne "Previous position" pour la Pos. S-1
 - Utilise la colonne "Position" pour la Pos. Actuelle
-- Récupère les données directement via le connecteur Ahrefs (Site Explorer → Organic Keywords) pour chacune des URLs listées ci-dessus`;
+- Si un export Ahrefs a été joint en PDF dans cette conversation, utilise-le en priorité. Sinon, récupère les données via le connecteur.`;
   }
 
   else if (type === 'positions') {
