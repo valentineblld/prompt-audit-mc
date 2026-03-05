@@ -261,7 +261,7 @@ textarea {
   <div class="form-grid">
     <div class="field">
       <label class="field-label">Site *</label>
-     <input type="text" id="h-site" placeholder="ex : selectra.info" />
+     <input type="text" id="o-site" placeholder="ex : selectra.info" />
     </div>
     <div class="field">
       <label class="field-label">Secteur</label>
@@ -304,7 +304,7 @@ OU ajoute le directement dans Claude."></textarea>
   <div class="form-grid">
     <div class="field">
       <label class="field-label">Site *</label>
-      <input type="text" id="h-site" placeholder="ex : selectra.info" />
+      <input type="text" id="p-site" placeholder="ex : selectra.info" />
     </div>
     <div class="field">
       <label class="field-label">Pays</label>
@@ -446,7 +446,7 @@ function generate(type) {
   let prompt = '';
 
   if (type === 'opps') {
-    const site      = v('o-site') || '[NOM DU SITE]';
+    const site = v('h-site') || '[NOM DU SITE]';
     const sector    = v('o-sector') || '[secteur]';
     const country   = v('o-country') || 'France';
     const posMin    = v('o-pos-min') || '4';
