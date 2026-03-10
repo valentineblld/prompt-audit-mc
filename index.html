@@ -311,7 +311,7 @@ Colonnes obligatoires : Keyword, Volume, Previous position, Current position, Po
 
 <!-- SUIVI OPTIMISATIONS -->
 <div class="panel" id="panel-optims">
-  <div class="context-banner banner-optims">Export Ahrefs Organic Keywords optionnel mais recommandé · Sinon, données récupérées automatiquement via le connecteur Ahrefs (à tester)</div>
+  <div class="context-banner banner-optims">Export Ahrefs Organic Keywords requis</div>
   <div class="form-grid">
     <div class="field">
       <label class="field-label">Site</label>
@@ -330,7 +330,7 @@ Colonnes obligatoires : Keyword, Volume, Previous position, Current position, Po
 https://lafibreoptique.fr/guide/installer-la-fibre/
 https://lafibreoptique.fr/offre-fibre/orange/
 https://lafibreoptique.fr/comparatif-box/" style="min-height:100px"></textarea>
-      <div class="export-hint">Ces URLs seront interrogées une par une via le connecteur Ahrefs ou l'export fourni selon la méthode choisie.</div>
+      <div class="export-hint">Ces URLs seront interrogées une par une via l'export fourni.</div>
     </div>
     <div class="field field-full">
       <label class="field-label">Mots-clés "Top Priorité" — optionnel</label>
@@ -564,7 +564,7 @@ ${exportData || '[colle ici : Ahrefs → Site Explorer → Organic Keywords → 
 
     prompt =
 `Tu es un analyste SEO expert en interprétation de données et Data Visualization.
-Utilise le connecteur Ahrefs pour le site ${site}. Ton objectif est de générer un fichier Excel d'analyse hebdomadaire en te concentrant sur les récentes optimisations.
+Ton objectif est de générer un fichier Excel d'analyse hebdomadaire pour le site ${site} en te concentrant sur les récentes optimisations.
 
 CONTEXTE ET CIBLAGE
 URLs stratégiques à surveiller (pages récemment optimisées ou créées) :
@@ -592,7 +592,7 @@ Rédigé en ${lang}.
 RAPPEL TECHNIQUE
 - Utilise la colonne "Previous position" pour la Pos. S-1
 - Utilise la colonne "Position" pour la Pos. Actuelle
-- Si un export Ahrefs a été joint en PDF dans cette conversation, utilise-le en priorité. Sinon, récupère les données via le connecteur.`;
+- Utilise l'export Ahrefs joint en PDF dans cette conversation.`;
   }
 
   else if (type === 'positions') {
